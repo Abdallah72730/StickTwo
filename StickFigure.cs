@@ -16,9 +16,6 @@ namespace StickTwo
         public double VelocityY { get; set; }
 
         private Canvas Container;
-        private const double Gravity = 0.5;
-        private const double GroundLevel = 300;
-        private const double Speed = 5;
         
 
         private Ellipse Head;
@@ -41,7 +38,7 @@ namespace StickTwo
 
         public void CreateBodyParts()
         {
-            Head = new Ellipse { Width = 20, Height = 20, Stroke = System.Windows.Media.Brushes.Black };
+            Head = new Ellipse { Width = 20, Height = 20, Stroke = System.Windows.Media.Brushes.Black, StrokeThickness = 2 };
             Body = new Line { Stroke = System.Windows.Media.Brushes.Black, StrokeThickness = 2 };
             LeftArm = new Line { Stroke = System.Windows.Media.Brushes.Black, StrokeThickness = 2 };
             RightArm = new Line { Stroke = System.Windows.Media.Brushes.Black, StrokeThickness = 2 };
@@ -65,33 +62,33 @@ namespace StickTwo
 
         public void UpdatePosition()
         {
-            Canvas.SetLeft(Head, X - Head.Width / 2);
+            Canvas.SetLeft(Head, X - 10);
             Canvas.SetTop(Head, Y);
 
             Body.X1 = X;
-            Body.Y1 = Y - 20;
+            Body.Y1 = Y + 20;
             Body.X2 = X;
-            Body.Y2 = Y + 20;
+            Body.Y2 = Y + 60;
 
             LeftArm.X1 = X;
-            LeftArm.Y1 = Y - 10;
+            LeftArm.Y1 = Y + 30;
             LeftArm.X2 = X - 15;
-            LeftArm.Y2 = Y + 10;
+            LeftArm.Y2 = Y + 50;
 
             RightArm.X1 = X;
-            RightArm.Y1 = Y - 10;
+            RightArm.Y1 = Y + 30;
             RightArm.X2 = X + 15;
-            RightArm.Y2 = Y + 10;
+            RightArm.Y2 = Y + 50;
 
             LeftLeg.X1 = X;
-            LeftLeg.Y1 = Y + 20;
+            LeftLeg.Y1 = Y + 60;
             LeftLeg.X2 = X - 15;
-            LeftLeg.Y2 = Y + 40;
+            LeftLeg.Y2 = Y + 90;
 
             RightLeg.X1 = X;
-            RightLeg.Y1 = Y + 20;
+            RightLeg.Y1 = Y + 60;
             RightLeg.X2 = X + 15;
-            RightLeg.Y2 = Y + 40;
+            RightLeg.Y2 = Y + 90;
         }
 
 

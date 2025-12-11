@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StickTwo"
         mc:Ignorable="d"
-        Title="StickMan Game" Height="600" Width="800">
+        Title="StickMan Game" Height="600" Width="800" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
     <Canvas x:Name="GameCanvas" Background="LightBlue">
     </Canvas>
 </Window>
