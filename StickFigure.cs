@@ -50,47 +50,47 @@ namespace StickTwo
             Container.Children.Add(RightArm);
             Container.Children.Add(LeftLeg);
             Container.Children.Add(RightLeg);
-            UpdatePosition();
+            UpdatePosition(0);
         }
 
-        public void Update() 
+        public void Update()
         {
             X += VelocityX;
-            Y += VelocityY;
-            UpdatePosition();
+            Y += VelocityY; 
         }
 
-        public void UpdatePosition()
+        public void UpdatePosition(double cameraOffsetX)
         {
-            Canvas.SetLeft(Head, X - 10);
-            Canvas.SetTop(Head, Y);
+            double screenX = X - cameraOffsetX;
+            double screenY = Y; 
 
-            Body.X1 = X;
-            Body.Y1 = Y + 20;
-            Body.X2 = X;
-            Body.Y2 = Y + 60;
+            Canvas.SetLeft(Head, screenX - 10);
+            Canvas.SetTop(Head, screenY);
 
-            LeftArm.X1 = X;
-            LeftArm.Y1 = Y + 30;
-            LeftArm.X2 = X - 15;
-            LeftArm.Y2 = Y + 50;
+            Body.X1 = screenX;
+            Body.Y1 = screenY + 20;
+            Body.X2 = screenX;
+            Body.Y2 = screenY + 60;
 
-            RightArm.X1 = X;
-            RightArm.Y1 = Y + 30;
-            RightArm.X2 = X + 15;
-            RightArm.Y2 = Y + 50;
+            LeftArm.X1 = screenX;
+            LeftArm.Y1 = screenY + 30;
+            LeftArm.X2 = screenX - 15;
+            LeftArm.Y2 = screenY + 50;
 
-            LeftLeg.X1 = X;
-            LeftLeg.Y1 = Y + 60;
-            LeftLeg.X2 = X - 15;
-            LeftLeg.Y2 = Y + 90;
+            RightArm.X1 = screenX;
+            RightArm.Y1 = screenY + 30;
+            RightArm.X2 = screenX + 15;
+            RightArm.Y2 = screenY + 50;
 
-            RightLeg.X1 = X;
-            RightLeg.Y1 = Y + 60;
-            RightLeg.X2 = X + 15;
-            RightLeg.Y2 = Y + 90;
+            LeftLeg.X1 = screenX;
+            LeftLeg.Y1 = screenY + 60;
+            LeftLeg.X2 = screenX - 15;
+            LeftLeg.Y2 = screenY + 90;
+
+            RightLeg.X1 = screenX;
+            RightLeg.Y1 = screenY + 60;
+            RightLeg.X2 = screenX + 15;
+            RightLeg.Y2 = screenY + 90;
         }
-
-
     }
 }
