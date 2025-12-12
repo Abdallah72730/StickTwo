@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.DirectoryServices;
-using System.Text;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace StickTwo
@@ -15,82 +11,81 @@ namespace StickTwo
         public double VelocityX { get; set; }
         public double VelocityY { get; set; }
 
-        private Canvas Container;
-        
+        private Canvas container;
+        private Canvas figureCanvas;   // <--- NEW: container for all body parts
 
-        private Ellipse Head;
-        private Line Body;
-        private Line LeftArm;
-        private Line RightArm;
-        private Line LeftLeg;
-        private Line RightLeg;
+        private Ellipse head;
+        private Line body;
+        private Line leftArm;
+        private Line rightArm;
+        private Line leftLeg;
+        private Line rightLeg;
 
         public StickFigure(Canvas container, double startX, double startY)
         {
-            Container = container;
+            this.container = container;
             X = startX;
             Y = startY;
             VelocityX = 0;
             VelocityY = 0;
 
-            CreateBodyParts();
+            CreateBody();
+            UpdatePosition(0);
         }
 
-        public void CreateBodyParts()
+        private void CreateBody()
         {
-            Head = new Ellipse { Width = 20, Height = 20, Stroke = System.Windows.Media.Brushes.Black, StrokeThickness = 2 };
-            Body = new Line { Stroke = System.Windows.Media.Brushes.Black, StrokeThickness = 2 };
-            LeftArm = new Line { Stroke = System.Windows.Media.Brushes.Black, StrokeThickness = 2 };
-            RightArm = new Line { Stroke = System.Windows.Media.Brushes.Black, StrokeThickness = 2 };
-            LeftLeg = new Line { Stroke = System.Windows.Media.Brushes.Black, StrokeThickness = 2 };
-            RightLeg = new Line { Stroke = System.Windows.Media.Brushes.Black, StrokeThickness = 2 };
-            Container.Children.Add(Head);
-            Container.Children.Add(Body);
-            Container.Children.Add(LeftArm);
-            Container.Children.Add(RightArm);
-            Container.Children.Add(LeftLeg);
-            Container.Children.Add(RightLeg);
-            UpdatePosition(0);
+            // Create the sub-canvas for the whole figure
+            figureCanvas = new Canvas();
+            container.Children.Add(figureCanvas);
+
+            head = new Ellipse
+            {
+                Width = 20,
+                Height = 20,
+                Stroke = Brushes.Black,
+                StrokeThickness = 2
+            };
+            Canvas.SetLeft(head, -10);
+            Canvas.SetTop(head, 0);
+            figureCanvas.Children.Add(head);
+
+            body = MakeLine(0, 20, 0, 60);
+            leftArm = MakeLine(0, 30, -15, 50);
+            rightArm = MakeLine(0, 30, 15, 50);
+            leftLeg = MakeLine(0, 60, -15, 90);
+            rightLeg = MakeLine(0, 60, 15, 90);
+
+            figureCanvas.Children.Add(body);
+            figureCanvas.Children.Add(leftArm);
+            figureCanvas.Children.Add(rightArm);
+            figureCanvas.Children.Add(leftLeg);
+            figureCanvas.Children.Add(rightLeg);
+        }
+
+        private Line MakeLine(double x1, double y1, double x2, double y2)
+        {
+            return new Line
+            {
+                Stroke = Brushes.Black,
+                StrokeThickness = 2,
+                X1 = x1,
+                Y1 = y1,
+                X2 = x2,
+                Y2 = y2
+            };
         }
 
         public void Update()
         {
             X += VelocityX;
-            Y += VelocityY; 
+            Y += VelocityY;
         }
 
         public void UpdatePosition(double cameraOffsetX)
         {
-            double screenX = X - cameraOffsetX;
-            double screenY = Y; 
-
-            Canvas.SetLeft(Head, screenX - 10);
-            Canvas.SetTop(Head, screenY);
-
-            Body.X1 = screenX;
-            Body.Y1 = screenY + 20;
-            Body.X2 = screenX;
-            Body.Y2 = screenY + 60;
-
-            LeftArm.X1 = screenX;
-            LeftArm.Y1 = screenY + 30;
-            LeftArm.X2 = screenX - 15;
-            LeftArm.Y2 = screenY + 50;
-
-            RightArm.X1 = screenX;
-            RightArm.Y1 = screenY + 30;
-            RightArm.X2 = screenX + 15;
-            RightArm.Y2 = screenY + 50;
-
-            LeftLeg.X1 = screenX;
-            LeftLeg.Y1 = screenY + 60;
-            LeftLeg.X2 = screenX - 15;
-            LeftLeg.Y2 = screenY + 90;
-
-            RightLeg.X1 = screenX;
-            RightLeg.Y1 = screenY + 60;
-            RightLeg.X2 = screenX + 15;
-            RightLeg.Y2 = screenY + 90;
+            Canvas.SetLeft(figureCanvas, X - cameraOffsetX);
+            Canvas.SetTop(figureCanvas, Y);
         }
     }
 }
