@@ -35,7 +35,8 @@ namespace StickTwo
                 Width = size,
                 Height = size * 0.6,
                 Fill = Brushes.White,
-                Opacity = 0.8
+                Opacity = 0.8,
+                IsHitTestVisible = false
             };
 
             Canvas.SetLeft(e, offsetX);

@@ -23,7 +23,8 @@ namespace StickTwo
         private bool isRightPressed;
         private bool isLeftPressed;
         private bool isUpPressed;
-
+        private bool isAttackedPressed;
+        private int frameCount = 0;
 
         private double gravity = 0.5;
         private double groundLevel = 360;
@@ -49,7 +50,7 @@ namespace StickTwo
             CreateEnvironment();
             stickFigure = new StickFigure(GameCanvas, 100, 100);
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(8); // ~60 FPS
+            timer.Interval = TimeSpan.FromMilliseconds(16); // ~60 FPS
             timer.Tick += GameLoop;
             timer.Start();
         }
@@ -179,9 +180,10 @@ namespace StickTwo
             GameCanvas.Children.Add(grass);
 
         }
-
+        
         public void UpdateCamera() 
         {
+            
             if (stickFigure.X > 450)
             {
                 cameraOffsetX = stickFigure.X - 450;
@@ -192,10 +194,13 @@ namespace StickTwo
             }
             Canvas.SetLeft(ground, -cameraOffsetX);
             Canvas.SetLeft(grass, -cameraOffsetX);
-
-            foreach (var cloud in clouds) 
+           frameCount++;
+            if (frameCount % 2 == 0)
             {
-                cloud.update(-cameraOffsetX * 0.3);
+                foreach (var cloud in clouds)
+                {
+                    cloud.update(-cameraOffsetX * 0.3);
+                }
             }
         }
     }

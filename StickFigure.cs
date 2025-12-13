@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Threading.Tasks.Sources;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -20,6 +21,24 @@ namespace StickTwo
         private Line rightArm;
         private Line leftLeg;
         private Line rightLeg;
+
+        private bool isMoving;
+        private bool facingLeft;
+        private int animationFrame;
+        private double armSwing;
+        double legSwing;
+        bool isAttacking;
+        bool attackProcessed;
+        int attackFrame;
+        int attackDuration = 10;
+        int maxHealth = 100;
+        int currentHealth;
+        Rectangle healthBarBackground;
+        Rectangle healthBarForeground;
+        TextBlock healthText;
+
+
+
 
         public StickFigure(Canvas container, double startX, double startY)
         {
@@ -87,5 +106,93 @@ namespace StickTwo
             Canvas.SetLeft(figureCanvas, X - cameraOffsetX);
             Canvas.SetTop(figureCanvas, Y);
         }
+
+        public void setMoving(bool moving, bool left) 
+        {
+            isMoving = moving;
+            facingLeft = left;
+        }
+
+        public void Attack() 
+        {
+            if (!isAttacking) 
+            {
+                isAttacking = true;
+                attackProcessed = false;
+                attackFrame = 0;
+            }
+        }
+
+        public void TakeDamage(int damage)
+        {
+            currentHealth -= damage;
+            if (currentHealth < 0) currentHealth = 0;
+            UpdateHealthBar();
+        }
+        public void CreateHealthBar(Canvas figureCanvas) 
+        {
+            healthBarBackground = new Rectangle
+            {
+                Width = 60,
+                Height = 8,
+                Fill = Brushes.DarkRed
+            };
+            Canvas.SetLeft(healthBarBackground, -30);
+            Canvas.SetTop(healthBarBackground, -20);
+
+            healthBarForeground = new Rectangle
+            {
+                Width = 58,
+                Height = 6,
+                Fill = Brushes.LimeGreen
+            };
+            Canvas.SetLeft(healthBarForeground, -29);
+            Canvas.SetTop(healthBarForeground, -19);
+
+            healthText = new TextBlock
+            {
+                Text = $"{currentHealth}/{maxHealth}",
+                FontSize = 8,
+                Foreground = Brushes.White
+            };
+
+            Canvas.SetLeft(healthText, -15);
+            Canvas.SetTop(healthText, -35);
+
+            figureCanvas.Children.Add(healthBarBackground);
+            figureCanvas.Children.Add(healthBarForeground);
+            figureCanvas.Children.Add(healthText);
+        }
+
+        public void updateHealthBar()
+        {
+            double healthPercent = (double)currentHealth / maxHealth * 100;
+            healthBarForeground.Width = healthPercent * 0.58;
+            healthText.Text = $"{currentHealth}/{maxHealth}";
+            if (healthPercent > 0.6)
+            {
+                healthBarForeground.Fill = Brushes.LimeGreen;
+            }
+            else if (healthPercent > 0.3)
+            {
+                healthBarForeground.Fill = Brushes.Orange;
+            }
+            else
+            {
+                healthBarForeground.Fill = Brushes.Red;
+            }
+        }
+
+        //public void updateLimbPositions() 
+        //{
+        //    if (isAttacking) 
+        //    {
+        //        for (int i = 0; i <= attackFrame; i++) 
+        //        {
+        //            leftArm.X2 -= facingLeft ? 5 : 0;
+        //            leftArm.Y2 -= 4;
+        //        }
+        //    }
+        //}
     }
 }
